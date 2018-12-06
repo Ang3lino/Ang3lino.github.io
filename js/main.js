@@ -71,8 +71,14 @@ $(document).ready(() => {
         let collapsibleSig1 = document.getElementById('collapsible-sig-1')
                                       .getElementsByTagName('table')[0]
                                       .getElementsByTagName('tbody')[0];
+        this.magnitudeSig1 = Number(magnitudeSig1.val());
+        this.offsetSig1 = Number(offsetSig1.val());
+        console.log(this.magnitudeSig1);
+        console.log(this.offsetSig1);
+        let mid = this.magnitudeSig1 >> 1;
+        let start = this.offsetSig1 - mid, end = this.offsetSig1 + mid;
         let newInner = "";
-        for (let i = 0; i < 10; ++i) {
+        for (let i = start; i <= end; ++i) {
             let tmp = template.split("N").join(i); // replace all ocurrences
             newInner += tmp;
         }
