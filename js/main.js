@@ -101,7 +101,7 @@ $(document).ready(() => {
         console.log(arr);
     });
 
-    btnUpdateSig2.click(function(e) {
+    btnUpdateSig2.click(function(e) { // si, ya se que me repeti v:
         //console.log(magnitudeSig1.val());
         let template = '<td> \
                             <div class="input-field"> \
