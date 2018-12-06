@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-	<title> Operaciones sobre senales discretas </title>
+	<title> Operaciones sobre señales discretas </title>
 
 	<!--Import Google Icon Font-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,8 +18,7 @@
 	<script src="jquery/jquery-3.3.1.js" type="text/javascript"> </script>
 
 	<!-- Viz files -->
-	<script src="node_modules/vis/dist/vis.js"></script> 
-	<link href="node_modules/vis/dist/vis.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> 
 
 	<!--
 		<script src="js/functionOptimization.js" type="text/javascript"> </script>
@@ -37,7 +36,7 @@
 <body>
 	<nav>
 		<div class="nav-wrapper #7cb342 light-green darken-1">
-			<a href="#" class="brand-logo center">Senales discretas</a>
+			<a href="#" class="brand-logo center">Señales discretas</a>
 		</div>
 	</nav>
 		
@@ -52,13 +51,15 @@
 				<!-- Grey navigation panel -->
 				<h5 > Operaciones </h5>
 				<div class="collection ">
-					<a href="#!" class="collection-item">Suma</a>
-					<a href="#!" class="collection-item">resta</a>
-					<a href="#!" class="collection-item">multiplicacion</a>
-					<a href="#!" class="collection-item">Desplazamiento en tiempo</a>
-					<a href="#!" class="collection-item">Reflejo en tiempo</a>
-					<a href="#!" class="collection-item">Interpolacion</a>
-					<a href="#!" class="collection-item">Convolucion discreta</a>
+					<a href="#!" onclick="suma()" class="collection-item">Suma</a>
+					<a href="#!" onclick="resta()" class="collection-item">Resta</a>
+					<a href="#!" onclick="multiplicacion()" class="collection-item">Multiplicación</a>
+					<a href="#!" onclick="escalamiento()" class="collection-item">Escalamiento</a>
+					<a href="#!" onclick="desplazamiento()" class="collection-item">Desplazamiento en tiempo</a>
+					<a href="#!" onclick="reflejo()" class="collection-item">Reflejo en tiempo</a>
+					<a href="#!" onclick="diezmacion()" class="collection-item">Diezmación</a>
+					<a href="#!" onclick="interpolacion()" class="collection-item">Interpolación</a>
+					<a href="#!" onclick="convolucion()" class="collection-item">Convolución</a>
 				</div>
 			</div>
 		
@@ -68,13 +69,15 @@
 				<div class="row">
 
 					<div class="section col s6"> <!-- Signal 1 panel -->
-						<h5 class="center-align"> Senal 1</h5>
-						<div id="signal-1"></div>
+						<h5 class="center-align"> Señal 1</h5>
+						<div>
+								<canvas id="signal-1" width="600" height="400"></canvas>
+						</div>
 
 						<div class="row valign-wrapper ">
 							<div class="input-field col s5"> 
 								<input id="txt-size-sig-1" type="text" class="validate">
-								<label for="Magnitud">Magnitud</label>
+								<label for="Longitud">Longitud</label>
 							</div>
 
 							<div class="input-field col s5"> 
@@ -90,13 +93,15 @@
 					</div>
 
 					<div class="section col s6"> <!-- Signal 2 panel -->
-						<h5 class="center-align"> Senal 2</h5>
-						<div id="signal-2"></div>
+						<h5 class="center-align"> Señal 2</h5>
+						<div>
+								<canvas id="signal-2" width="600" height="400"></canvas>
+						</div>
 
 						<div class="row valign-wrapper ">
 							<div class="input-field col s5"> 
 								<input id="txt-size-sig-2" type="text" class="validate">
-								<label for="Magnitud">Magnitud</label>
+								<label for="Longitud">Longitud</label>
 							</div>
 
 							<div class="input-field col s5"> 
@@ -127,7 +132,7 @@
 								</tr> 
 							</tbody>
 						</table>
-						<button class="btn waves-effect waves-light" type="submit" name="action" id="load-sig-1">Cargar senal
+						<button class="btn waves-effect waves-light" type="submit" name="action" id="load-sig-1">Cargar señal
 							<i class="material-icons right">send</i>
 						</button>
 					</span>
@@ -144,7 +149,7 @@
 							</div> </td> 
 						</tr> </tbody></table> 
 					
-						<button class="btn waves-effect waves-light" type="submit" name="action" id="load-sig-2">Cargar senal
+						<button class="btn waves-effect waves-light" type="submit" name="action" id="load-sig-2">Cargar señal
 							<i class="material-icons right">send</i>
 						</button>
 						</span>
@@ -152,10 +157,24 @@
 				</li> </ul>
 
 				<div class="section">
-					<h5> Senal resultante </h5>
-					<div id="signal-result"></div>
-					<p>Stuff</p>
+					<h5> Señal resultante </h5>
+					<div>
+							<canvas id="signal-result" width="600" height="400"></canvas>
+					</div>
 				</div>
+
+				<ul class="collapsible center-align" > <li>
+					<div class="collapsible-header"><i class="material-icons">filter_drama</i>Resultante</div>
+					<div class="collapsible-body" id="collapsible-sig-r"> 
+						<span> <table> <tbody> <tr> 
+							<td> <div class="input-field">
+								<input placeholder="N" id="sig-r-txt-N" type="text" class="validate">
+								<label for="first_name">N</label>
+							</div> </td> 
+						</tr> </tbody></table> 
+						</span>
+					</div>
+				</li> </ul>
 
 			</div>
 		
@@ -167,7 +186,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col l6 s12">
-					<h5 class="white-text">Teoria de comunicaciones y agradecimientos</h5>
+					<h5 class="white-text">Teoria de comunicaciones y señales</h5>
 					<p class="grey-text text-lighten-4">
 						Lopez Manriquez Angel 
 						<br>
@@ -178,7 +197,7 @@
 		</div>
 		<div class="footer-copyright">
 			<div class="container">
-				© 2018 Yvideos
+				© 2018 ESCOM IPN
 			</div>
 		</div>
 	</footer>
@@ -193,6 +212,7 @@
 	</script>
 
 	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/vector.js"></script>
 
 </body>
 
