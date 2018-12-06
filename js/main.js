@@ -61,6 +61,12 @@ $(document).ready(() => {
     let btnUpdateSig1 = $('#btn-update-sig-1');
     let btnUpdateSig2 = $('#btn-update-sig-2');
 
+    let btnLoadSig1 = $('#load-sig-1');
+    let btnLoadSig2 = $('#load-sig-2');
+
+    let inferiorLimSig1, inferiorLimSig2;
+    let superiorLimSig1, superiorLimSig2;
+
     btnUpdateSig1.click(function(e) {
         //console.log(magnitudeSig1.val());
         let template = '<td> \
@@ -76,9 +82,9 @@ $(document).ready(() => {
         console.log(this.magnitudeSig1);
         console.log(this.offsetSig1);
         let mid = this.magnitudeSig1 >> 1;
-        let start = this.offsetSig1 - mid, end = this.offsetSig1 + mid;
+        inferiorLimSig1 = this.offsetSig1 - mid, superiorLimSig1 = this.offsetSig1 + mid;
         let newInner = "";
-        for (let i = start; i <= end; ++i) {
+        for (let i = inferiorLimSig1; i <= superiorLimSig1; ++i) {
             let tmp = template.split("N").join(i); // replace all ocurrences
             newInner += tmp;
         }
@@ -87,24 +93,46 @@ $(document).ready(() => {
         console.log(collapsibleSig1);
     });
 
-/**
- * This function will create dynamically a table of restrictions to fill.
- * @param {A string of the alphabet ab...z} vars 
- * @param {integer of the amount of variables used} varCount 
- * @param {An HTMLObject (container) of the restrictions table} tableHTML 
- */
-function createHTMLLimits(vars, varCount, tableHTML) {
-    const template = '<tr> <td> <input type="number" id="low-X"> </td> \
-        <td>var</td> \
-        <td> <input type="number" id="high-X"> </td> </tr>';
-    let mainBody = tableHTML.getElementsByTagName("table")[0]
-                            .getElementsByTagName("tbody")[0];
-    let newStr = "";
-    for (let i = 0; i < varCount; ++i) {
-        let buff = template.replace("X", i);
-        newStr += buff.replace("X", i).replace("var", vars[i]);
-    }
-    mainBody.innerHTML = newStr;
-}
+    btnLoadSig1.click(function() {
+        let arr = Array();
+        for (let i = inferiorLimSig1; i <= superiorLimSig1; ++i) {
+            arr.push(Number($('#sig-1-txt-'+i).val()));
+        }
+        console.log(arr);
+    });
+
+    btnUpdateSig2.click(function(e) {
+        //console.log(magnitudeSig1.val());
+        let template = '<td> \
+                            <div class="input-field"> \
+                            <input placeholder="N" id="sig-2-txt-N" type="text" class="validate"> \
+                            <label for="first_name">N</label> </div>  \
+                        </td> ';
+        let collapsibleSig2 = document.getElementById('collapsible-sig-2')
+                                      .getElementsByTagName('table')[0]
+                                      .getElementsByTagName('tbody')[0];
+        this.magnitudeSig2 = Number(magnitudeSig2.val());
+        this.offsetSig2 = Number(offsetSig2.val());
+        console.log(this.magnitudeSig2);
+        console.log(this.offsetSig2);
+        let mid = this.magnitudeSig2 >> 1;
+        inferiorLimSig2 = this.offsetSig2 - mid, superiorLimSig2 = this.offsetSig2 + mid;
+        let newInner = "";
+        for (let i = inferiorLimSig2; i <= superiorLimSig2; ++i) {
+            let tmp = template.split("N").join(i); // replace all ocurrences
+            newInner += tmp;
+        }
+        console.log(newInner);
+        collapsibleSig2.innerHTML = '<tr>' + newInner + '</tr>';
+        console.log(collapsibleSig2);
+    });
+
+    btnLoadSig2.click(function() {
+        let arr = Array();
+        for (let i = inferiorLimSig2; i <= superiorLimSig2; ++i) {
+            arr.push(Number($('#sig-2-txt-'+i).val()));
+        }
+        console.log(arr);
+    });
 
 });
